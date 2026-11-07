@@ -15,7 +15,12 @@ public final class ConfigCache {
     private static volatile int filterMax = 1;
     private static volatile int anchorMax = 1;
     private static volatile int stoneGeneratorMax = 1;
-    private static volatile boolean removeSpeedEnergyCost = true;
+
+    private static volatile boolean removeSpeedEnergyCost = false;
+    private static volatile boolean limitSpeedEnergyIncrease = true;
+    private static volatile double speedEnergyMultiplierCap = 10.0D;
+    private static volatile boolean limitEnergyReduction = true;
+    private static volatile double energyConsumptionFloor = 0.1D;
 
     private ConfigCache() {
     }
@@ -36,7 +41,25 @@ public final class ConfigCache {
         return removeSpeedEnergyCost;
     }
 
-    static void update(int speed, int energy, int gas, int muffling, int filter, int anchor, int stone, boolean freeSpeedEnergy) {
+    public static boolean limitSpeedEnergyIncrease() {
+        return limitSpeedEnergyIncrease;
+    }
+
+    public static double speedEnergyMultiplierCap() {
+        return speedEnergyMultiplierCap;
+    }
+
+    public static boolean limitEnergyReduction() {
+        return limitEnergyReduction;
+    }
+
+    public static double energyConsumptionFloor() {
+        return energyConsumptionFloor;
+    }
+
+    static void update(int speed, int energy, int gas, int muffling, int filter, int anchor, int stone,
+                       boolean freeSpeedEnergy, boolean limitSpeedEnergy, double speedEnergyCap,
+                       boolean limitEnergy, double energyFloor) {
         speedMax = speed;
         energyMax = energy;
         gasMax = gas;
@@ -45,5 +68,9 @@ public final class ConfigCache {
         anchorMax = anchor;
         stoneGeneratorMax = stone;
         removeSpeedEnergyCost = freeSpeedEnergy;
+        limitSpeedEnergyIncrease = limitSpeedEnergy;
+        speedEnergyMultiplierCap = speedEnergyCap;
+        limitEnergyReduction = limitEnergy;
+        energyConsumptionFloor = energyFloor;
     }
 }

@@ -16,13 +16,28 @@ public class MixinMekanismUtils {
 
     /**
      * 原版：def * 10^(2 * 加速/8 - 能量/8)。
-     * 去掉“2 * 加速”这一项，加速升级不再影响耗电，只剩能量升级的折扣。
+     * 现在按三个开关组合：
+     * - removeSpeedEnergyCost：加速完全不耗电（1.0.0 行为）；
+     * - limitSpeedEnergyIncrease：加速贡献最多 speedEnergyMultiplierCap 倍；
+     * - limitEnergyReduction：能量贡献最多把耗电降到 energyConsumptionFloor 倍。
      */
     @Inject(method = "getEnergyPerTick", at = @At("HEAD"), cancellable = true, remap = false)
     private static void mekupgradetuner$freeSpeedEnergy(IUpgradeTile tile, FloatingLong def, CallbackInfoReturnable<FloatingLong> cir) {
-        if (ConfigCache.removeSpeedEnergyCost() && tile.supportsUpgrades()) {
-            double exponent = -MekanismUtils.fractionUpgrades(tile, Upgrade.ENERGY);
-            cir.setReturnValue(def.multiply(Math.pow(MekanismConfig.general.maxUpgradeMultiplier.get(), exponent)));
+        if (tile.supportsUpgrades()) {
+            double speedMultiplier = 1.0D;
+            if (!ConfigCache.removeSpeedEnergyCost()) {
+                speedMultiplier = Math.pow(MekanismConfig.general.maxUpgradeMultiplier.get(),
+                        2 * MekanismUtils.fractionUpgrades(tile, Upgrade.SPEED));
+                if (ConfigCache.limitSpeedEnergyIncrease()) {
+                    speedMultiplier = Math.min(speedMultiplier, ConfigCache.speedEnergyMultiplierCap());
+                }
+            }
+            double energyDivisor = Math.pow(MekanismConfig.general.maxUpgradeMultiplier.get(),
+                    MekanismUtils.fractionUpgrades(tile, Upgrade.ENERGY));
+            if (ConfigCache.limitEnergyReduction()) {
+                energyDivisor = Math.min(energyDivisor, 1.0D / ConfigCache.energyConsumptionFloor());
+            }
+            cir.setReturnValue(def.multiply(speedMultiplier / energyDivisor));
         }
     }
 }
