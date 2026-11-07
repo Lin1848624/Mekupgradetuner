@@ -21,3 +21,7 @@
     limitEnergyReduction = true
     # 耗电最低降到基础值的几倍。0.1 = 最多省 90%，不会更低。范围 0.0001-1.0。
     energyConsumptionFloor = 0.1
+    # true = 给最终耗电再加一个最低值，防止被能量升级压得太低。
+    limitMinimumConsumption = true
+    # 最终耗电最低为基础耗电的百分之几。50.0 = 最低 50%；100 = 基础耗电；200 = 最低 2 倍基础耗电。范围 0-1000。
+    minimumConsumptionPercent = 50.0
