@@ -37,7 +37,11 @@ public class MixinMekanismUtils {
             if (ConfigCache.limitEnergyReduction()) {
                 energyDivisor = Math.min(energyDivisor, 1.0D / ConfigCache.energyConsumptionFloor());
             }
-            cir.setReturnValue(def.multiply(speedMultiplier / energyDivisor));
+            FloatingLong result = def.multiply(speedMultiplier / energyDivisor);
+            if (ConfigCache.limitMinimumConsumption()) {
+                result = result.max(def.multiply(ConfigCache.minimumConsumptionPercent() / 100.0D));
+            }
+            cir.setReturnValue(result);
         }
     }
 }

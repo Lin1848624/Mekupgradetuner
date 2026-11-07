@@ -25,6 +25,8 @@ public final class Config {
     private static final ForgeConfigSpec.DoubleValue SPEED_ENERGY_CAP;
     private static final ForgeConfigSpec.BooleanValue LIMIT_ENERGY_REDUCTION;
     private static final ForgeConfigSpec.DoubleValue ENERGY_FLOOR;
+    private static final ForgeConfigSpec.BooleanValue LIMIT_MINIMUM_CONSUMPTION;
+    private static final ForgeConfigSpec.DoubleValue MINIMUM_CONSUMPTION_PERCENT;
 
     private static ModConfig modConfig;
 
@@ -63,6 +65,10 @@ public final class Config {
                 .define("limitEnergyReduction", true);
         ENERGY_FLOOR = builder.comment("耗电最低降到基础值的几倍。0.1 = 最多省 90%，不会更低。范围 0.0001-1.0。")
                 .defineInRange("energyConsumptionFloor", 0.1, 0.0001, 1.0);
+        LIMIT_MINIMUM_CONSUMPTION = builder.comment("true = 给最终耗电再加一个最低值，防止被能量升级压得太低。")
+                .define("limitMinimumConsumption", true);
+        MINIMUM_CONSUMPTION_PERCENT = builder.comment("最终耗电最低为基础耗电的百分之几。50.0 = 最低 50%；100 = 基础耗电；200 = 最低 2 倍基础耗电。范围 0-1000。")
+                .defineInRange("minimumConsumptionPercent", 50.0, 0.0, 1000.0);
         builder.pop();
 
         SPEC = builder.build();
@@ -91,7 +97,9 @@ public final class Config {
                 LIMIT_SPEED_ENERGY.get(),
                 SPEED_ENERGY_CAP.get(),
                 LIMIT_ENERGY_REDUCTION.get(),
-                ENERGY_FLOOR.get()
+                ENERGY_FLOOR.get(),
+                LIMIT_MINIMUM_CONSUMPTION.get(),
+                MINIMUM_CONSUMPTION_PERCENT.get()
         );
     }
 
@@ -113,7 +121,9 @@ public final class Config {
                 "  limitSpeedEnergyIncrease = " + LIMIT_SPEED_ENERGY.get(),
                 "  speedEnergyMultiplierCap = " + SPEED_ENERGY_CAP.get(),
                 "  limitEnergyReduction = " + LIMIT_ENERGY_REDUCTION.get(),
-                "  energyConsumptionFloor = " + ENERGY_FLOOR.get()
+                "  energyConsumptionFloor = " + ENERGY_FLOOR.get(),
+                "  limitMinimumConsumption = " + LIMIT_MINIMUM_CONSUMPTION.get(),
+                "  minimumConsumptionPercent = " + MINIMUM_CONSUMPTION_PERCENT.get()
         );
     }
 
@@ -210,6 +220,20 @@ public final class Config {
                     }
                     ENERGY_FLOOR.set(value);
                 }
+                case "limitMinimumConsumption" -> {
+                    Boolean value = parseBool(raw);
+                    if (value == null) {
+                        return "limitMinimumConsumption 只接受 true/false";
+                    }
+                    LIMIT_MINIMUM_CONSUMPTION.set(value);
+                }
+                case "minimumConsumptionPercent" -> {
+                    Double value = parseDouble(raw, 0.0D, 1000.0D);
+                    if (value == null) {
+                        return "minimumConsumptionPercent 必须是 0-1000 的数字";
+                    }
+                    MINIMUM_CONSUMPTION_PERCENT.set(value);
+                }
                 default -> {
                     return "未知配置项：" + key;
                 }
@@ -227,8 +251,9 @@ public final class Config {
             case "removeSpeedEnergyCost" -> setValue(key, Boolean.toString(!REMOVE_SPEED_ENERGY.get()));
             case "limitSpeedEnergyIncrease" -> setValue(key, Boolean.toString(!LIMIT_SPEED_ENERGY.get()));
             case "limitEnergyReduction" -> setValue(key, Boolean.toString(!LIMIT_ENERGY_REDUCTION.get()));
+            case "limitMinimumConsumption" -> setValue(key, Boolean.toString(!LIMIT_MINIMUM_CONSUMPTION.get()));
             default -> "不是开关项：" + key
-                    + "（可用：removeSpeedEnergyCost / limitSpeedEnergyIncrease / limitEnergyReduction）";
+                    + "（可用：removeSpeedEnergyCost / limitSpeedEnergyIncrease / limitEnergyReduction / limitMinimumConsumption）";
         };
     }
 

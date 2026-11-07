@@ -11,9 +11,10 @@ Minecraft 1.20.1 / Forge 47.4.10 / Mekanism 10.4.x
   - 能量升级的省电效果封顶（默认开，最低 0.1 倍，即最多省 90%）。
 - 升级界面、物品说明、存档读写都使用配置后的上限。
 - 游戏内指令实时改所有配置，并写回配置文件（1.2.0 新增）。
+- 最终耗电最低值：默认不低于基础耗电的 50%（1.3.0 新增，可开关、可改百分比）。
 
-默认值（1.2.0）：加速 12、能量 16、气体 16、消音 4、过滤 1、区块加载 1、造石 1；
-加速不耗电关、加速耗电上限开（10 倍）、能量省电下限开（0.1 倍）。
+默认值（1.3.0）：加速 12、能量 16、气体 16、消音 4、过滤 1、区块加载 1、造石 1；
+加速不耗电关、加速耗电上限开（10 倍）、能量省电下限开（0.1 倍）、最终耗电最低 50%。
 效果举例：
 - 8 加速 + 8 能量 = 1 倍基础耗电；
 - 12 加速 + 0 能量 = 10 倍基础耗电（封顶）；
@@ -41,15 +42,16 @@ Minecraft 1.20.1 / Forge 47.4.10 / Mekanism 10.4.x
 改完立即生效（已加载的机器下一 tick 重算），并写入 `config/mekupgradetuner-common.toml`，重启保留。
 
 配置项：`speedMax`、`energyMax`、`gasMax`、`mufflingMax`、`filterMax`、`anchorMax`、`stoneGeneratorMax`、
-`speedEnergyMultiplierCap`、`energyConsumptionFloor`。
+`speedEnergyMultiplierCap`、`energyConsumptionFloor`、`minimumConsumptionPercent`。
 
-开关项：`removeSpeedEnergyCost`、`limitSpeedEnergyIncrease`、`limitEnergyReduction`。
+开关项：`removeSpeedEnergyCost`、`limitSpeedEnergyIncrease`、`limitEnergyReduction`、`limitMinimumConsumption`。
 
 ## 安装
 
-1. 把 `mekupgradetuner-1.2.0.jar` 放进实例的 `mods` 文件夹。
+1. 把 `mekupgradetuner-1.3.0.jar` 放进实例的 `mods` 文件夹。
 2. 如果你装过 1.0.0：先删掉旧的 `config/mekupgradetuner-common.toml`，让新版按平衡默认值重新生成。
-   从 1.1.0 升上来不用删，配置项是一样的。
+   从 1.1.0 / 1.2.0 升上来一般不用删；如果配置文件里看不到 `limitMinimumConsumption` 和
+   `minimumConsumptionPercent` 这两项，就删掉配置文件让它重新生成。
 3. 启动游戏，生成 `config/mekupgradetuner-common.toml`。
 4. 用指令改立即生效；直接改配置文件则重启游戏生效。
 

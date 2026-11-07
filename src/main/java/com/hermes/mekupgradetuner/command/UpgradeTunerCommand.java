@@ -28,13 +28,16 @@ public final class UpgradeTunerCommand {
             "limitSpeedEnergyIncrease",
             "speedEnergyMultiplierCap",
             "limitEnergyReduction",
-            "energyConsumptionFloor"
+            "energyConsumptionFloor",
+            "limitMinimumConsumption",
+            "minimumConsumptionPercent"
     );
 
     private static final List<String> BOOL_KEYS = List.of(
             "removeSpeedEnergyCost",
             "limitSpeedEnergyIncrease",
-            "limitEnergyReduction"
+            "limitEnergyReduction",
+            "limitMinimumConsumption"
     );
 
     private UpgradeTunerCommand() {
@@ -126,6 +129,11 @@ public final class UpgradeTunerCommand {
             builder.suggest("0.1");
             builder.suggest("0.5");
             builder.suggest("0.01");
+        } else if ("minimumConsumptionPercent".equals(key)) {
+            builder.suggest("50.0");
+            builder.suggest("75.0");
+            builder.suggest("100.0");
+            builder.suggest("200.0");
         } else {
             builder.suggest("8");
             builder.suggest("12");

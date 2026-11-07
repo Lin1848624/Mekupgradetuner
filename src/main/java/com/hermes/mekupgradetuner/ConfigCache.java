@@ -24,6 +24,8 @@ public final class ConfigCache {
     private static volatile double speedEnergyMultiplierCap = 10.0D;
     private static volatile boolean limitEnergyReduction = true;
     private static volatile double energyConsumptionFloor = 0.1D;
+    private static volatile boolean limitMinimumConsumption = true;
+    private static volatile double minimumConsumptionPercent = 50.0D;
     private static volatile long revision = 0L;
     private static final Map<Object, Long> LAST_REVISION = Collections.synchronizedMap(new WeakHashMap<>());
 
@@ -62,6 +64,14 @@ public final class ConfigCache {
         return energyConsumptionFloor;
     }
 
+    public static boolean limitMinimumConsumption() {
+        return limitMinimumConsumption;
+    }
+
+    public static double minimumConsumptionPercent() {
+        return minimumConsumptionPercent;
+    }
+
     /**
      * 每次配置变化加一；机器看到新数字后重算一次耗电。
      */
@@ -89,7 +99,7 @@ public final class ConfigCache {
 
     static void update(int speed, int energy, int gas, int muffling, int filter, int anchor, int stone,
                        boolean freeSpeedEnergy, boolean limitSpeedEnergy, double speedEnergyCap,
-                       boolean limitEnergy, double energyFloor) {
+                       boolean limitEnergy, double energyFloor, boolean limitMinimum, double minimumPercent) {
         speedMax = speed;
         energyMax = energy;
         gasMax = gas;
@@ -102,6 +112,8 @@ public final class ConfigCache {
         speedEnergyMultiplierCap = speedEnergyCap;
         limitEnergyReduction = limitEnergy;
         energyConsumptionFloor = energyFloor;
+        limitMinimumConsumption = limitMinimum;
+        minimumConsumptionPercent = minimumPercent;
         revision++;
     }
 }
