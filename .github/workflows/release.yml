@@ -18,13 +18,13 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: Mekanism Upgrade Tuner 1.1.0
+          name: Mekanism Upgrade Tuner ${{ github.ref_name }}
           tag_name: ${{ github.ref_name }}
           draft: false
           prerelease: false
           fail_on_unmatched_files: true
           body: |
-            ## Mekanism Upgrade Tuner 1.1.0
+            ## Mekanism Upgrade Tuner ${{ github.ref_name }}
 
             Minecraft 1.20.1 / Forge 47.4.10 / Mekanism 10.4.x
 
