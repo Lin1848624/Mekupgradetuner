@@ -76,7 +76,12 @@ public final class ConfigCache {
     public static boolean shouldRecalculate(TileEntityMekanism tile) {
         long current = revision;
         Long last = LAST_REVISION.get(tile);
-        if (last != null && last == current) {
+        if (last == null) {
+            // 新加载的机器在读档时已经按当前配置重算过，这里只登记版本，不重复算。
+            LAST_REVISION.put(tile, current);
+            return false;
+        }
+        if (last == current) {
             return false;
         }
         LAST_REVISION.put(tile, current);
