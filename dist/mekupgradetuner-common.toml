@@ -1,0 +1,23 @@
+[upgradeLimits]
+    # 每种升级最多能装几个。范围 1-64。
+    # 原版值：加速 8、能量 8、气体 8、消音 4、过滤 1、区块加载 1、造石 1。
+    # 过滤 / 区块加载 / 造石是“装上就生效”的开关型升级，超过 1 个没有额外效果。
+    speedMax = 12
+    energyMax = 16
+    gasMax = 16
+    mufflingMax = 4
+    filterMax = 1
+    anchorMax = 1
+    stoneGeneratorMax = 1
+
+[energy]
+    # true = 加速升级完全不加耗电（1.0.0 的行为，比较超模）。
+    removeSpeedEnergyCost = false
+    # true = 给“加速带来的耗电上涨”封顶。
+    limitSpeedEnergyIncrease = true
+    # 加速最多把耗电提高到几倍。10.0 = 最多 10 倍（+900%）。范围 1.0-1000.0。
+    speedEnergyMultiplierCap = 10.0
+    # true = 给“能量升级的省电效果”封顶。
+    limitEnergyReduction = true
+    # 耗电最低降到基础值的几倍。0.1 = 最多省 90%，不会更低。范围 0.0001-1.0。
+    energyConsumptionFloor = 0.1

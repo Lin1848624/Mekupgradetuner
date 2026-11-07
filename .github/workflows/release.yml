@@ -1,0 +1,62 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Mekanism Upgrade Tuner 1.1.0
+          tag_name: ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          fail_on_unmatched_files: true
+          body: |
+            ## Mekanism Upgrade Tuner 1.1.0
+
+            Minecraft 1.20.1 / Forge 47.4.10 / Mekanism 10.4.x
+
+            ### 功能
+
+            - 7 种升级的安装上限可配置：加速、能量、气体、消音、过滤、区块加载、造石。
+            - 三个独立的耗电开关：
+              - 加速升级完全不加耗电（1.0.0 的行为，默认关）；
+              - 加速带来的耗电上涨封顶（默认开，最多 10 倍）；
+              - 能量升级的省电效果封顶（默认开，最低 0.1 倍，即最多省 90%）。
+            - 升级界面、物品说明、存档读写都使用配置后的上限。
+
+            ### 默认平衡模式
+
+            - 加速 12、能量 16、气体 16、消音 4、过滤 1、区块加载 1、造石 1；
+            - 加速不耗电关、加速耗电上限开（10 倍）、能量省电下限开（0.1 倍）；
+            - 8 加速 + 8 能量 = 1 倍基础耗电；12 加速 + 16 能量 = 1 倍；16 能量 = 0.1 倍。
+
+            ### 安装
+
+            1. 把 `mekupgradetuner-1.1.0.jar` 放进实例的 `mods` 文件夹。
+            2. 从 1.0.0 升级时，先删掉旧的 `config/mekupgradetuner-common.toml`，否则旧的 `removeSpeedEnergyCost = true` 会保留，平衡模式不会生效。
+            3. 启动游戏，生成新的配置文件。
+            4. 需要 Mekanism 10.4.x（1.20.1）和 Java 17。
+
+            ### 注意
+
+            - 调低上限或卸载模组时，已装超出的升级会被裁掉且不退还；先备份存档。
+            - 加速上限超过 12 时，化学灌注机、化学洗涤机、电解分离机、同位素离心机、颜料混合机、旋转冷凝机可能卡服。
+            - 不要和 MekanismTweaks、Mekanism Upgrade Caps、Upgrades: Reborn 等修改同一批方法的模组同时安装。
+
+            许可证：AGPL-3.0-only。
+          files: |
+            dist/mekupgradetuner-1.1.0.jar
+            dist/mekupgradetuner-common.toml
