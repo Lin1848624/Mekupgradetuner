@@ -128,6 +128,29 @@ public final class Config {
     }
 
     /**
+     * 给指令的 help 子命令用。
+     */
+    public static String currentValue(String key) {
+        return switch (key) {
+            case "speedMax" -> Integer.toString(SPEED_MAX.get());
+            case "energyMax" -> Integer.toString(ENERGY_MAX.get());
+            case "gasMax" -> Integer.toString(GAS_MAX.get());
+            case "mufflingMax" -> Integer.toString(MUFFLING_MAX.get());
+            case "filterMax" -> Integer.toString(FILTER_MAX.get());
+            case "anchorMax" -> Integer.toString(ANCHOR_MAX.get());
+            case "stoneGeneratorMax" -> Integer.toString(STONE_GENERATOR_MAX.get());
+            case "removeSpeedEnergyCost" -> Boolean.toString(REMOVE_SPEED_ENERGY.get());
+            case "limitSpeedEnergyIncrease" -> Boolean.toString(LIMIT_SPEED_ENERGY.get());
+            case "speedEnergyMultiplierCap" -> Double.toString(SPEED_ENERGY_CAP.get());
+            case "limitEnergyReduction" -> Boolean.toString(LIMIT_ENERGY_REDUCTION.get());
+            case "energyConsumptionFloor" -> Double.toString(ENERGY_FLOOR.get());
+            case "limitMinimumConsumption" -> Boolean.toString(LIMIT_MINIMUM_CONSUMPTION.get());
+            case "minimumConsumptionPercent" -> Double.toString(MINIMUM_CONSUMPTION_PERCENT.get());
+            default -> null;
+        };
+    }
+
+    /**
      * 指令改配置。成功返回 null，失败返回给玩家看的中文错误。
      */
     public static String setValue(String key, String raw) {

@@ -12,8 +12,9 @@ Minecraft 1.20.1 / Forge 47.4.10 / Mekanism 10.4.x
 - 升级界面、物品说明、存档读写都使用配置后的上限。
 - 游戏内指令实时改所有配置，并写回配置文件（1.2.0 新增）。
 - 最终耗电最低值：默认不低于基础耗电的 50%（1.3.0 新增，可开关、可改百分比）。
+- `help` 指令：列出所有参数的含义和当前值（1.4.0 新增）。
 
-默认值（1.3.0）：加速 12、能量 16、气体 16、消音 4、过滤 1、区块加载 1、造石 1；
+默认值（1.4.0）：加速 12、能量 16、气体 16、消音 4、过滤 1、区块加载 1、造石 1；
 加速不耗电关、加速耗电上限开（10 倍）、能量省电下限开（0.1 倍）、最终耗电最低 50%。
 效果举例：
 - 8 加速 + 8 能量 = 1 倍基础耗电；
@@ -25,10 +26,15 @@ Minecraft 1.20.1 / Forge 47.4.10 / Mekanism 10.4.x
 单人 / LAN 主机直接可用；专用服务器需要 OP（权限等级 2）。
 
 ```text
+/mekupgradetuner help
+/mekupgradetuner help <参数>
 /mekupgradetuner get
 /mekupgradetuner set <配置项> <值>
 /mekupgradetuner toggle <开关项>
 ```
+
+`help` 会按“安装上限 / 耗电规则”分组，列出每个参数的含义和当前值；
+`help <参数>` 看单项的详细说明和取值范围。
 
 例子：
 
@@ -48,7 +54,7 @@ Minecraft 1.20.1 / Forge 47.4.10 / Mekanism 10.4.x
 
 ## 安装
 
-1. 把 `mekupgradetuner-1.3.0.jar` 放进实例的 `mods` 文件夹。
+1. 把 `mekupgradetuner-1.4.0.jar` 放进实例的 `mods` 文件夹。
 2. 如果你装过 1.0.0：先删掉旧的 `config/mekupgradetuner-common.toml`，让新版按平衡默认值重新生成。
    从 1.1.0 / 1.2.0 升上来一般不用删；如果配置文件里看不到 `limitMinimumConsumption` 和
    `minimumConsumptionPercent` 这两项，就删掉配置文件让它重新生成。
